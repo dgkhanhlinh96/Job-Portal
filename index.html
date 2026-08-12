@@ -187,7 +187,7 @@ footer{border-top:1px solid var(--border);color:var(--muted);font-size:11px;padd
 <div class="notice-bar">
   <div class="notice-copy">🔔 <strong>Get notified when new roles are added</strong> · Connect on LINE or book a call with Linh.</div>
   <div class="notice-actions">
-    <button class="notice-line" onclick="contactNotConfigured('LINE')">LINE</button>
+    <button class="notice-line" onclick="openLine()">LINE</button>
     <button class="notice-book" onclick="openCalendly()">Book Linh</button>
   </div>
 </div>
@@ -450,7 +450,7 @@ function renderDetail(){
           <div class="promise"><strong>Long-term relationships.</strong> Recruitment isn’t about one job or one placement. It’s about building relationships that last.</div>
         </div>
         <div class="action-row">
-          <button class="line-btn" onclick="contactNotConfigured('LINE')">Connect on LINE</button>
+          <button class="line-btn" onclick="openLine()">Connect on LINE</button>
           <button class="call-btn" onclick="openCalendly()">Book a Call</button>
         </div>
       </div>
@@ -463,7 +463,7 @@ function filterCompany(company){mode="role";setModeButtons();document.getElement
 function showCompanies(event){event.preventDefault();mode="company";setModeButtons();document.body.classList.remove("detail-open");document.getElementById("jobs").scrollIntoView({behavior:"smooth"});renderBrowse()}
 function toggleSaved(event,id){event.stopPropagation();savedJobs.has(id)?savedJobs.delete(id):savedJobs.add(id);localStorage.setItem("openRolesSaved",JSON.stringify([...savedJobs]));renderBrowse();renderList()}
 function showSavedOnly(){savedOnly=!savedOnly;document.body.classList.remove("detail-open");renderBrowse();document.getElementById("savedBtn").style.borderColor=savedOnly?'var(--accent)':'var(--border)'}
-function contactNotConfigured(label){alert(`${label} will be connected before launch.`)}
+function openLine(){window.open("https://line.me/ti/p/9LukCM8eCj","_blank","noopener,noreferrer")}
 function openCalendly(){window.open("https://calendly.com/rhlinh-dang-casualchat/30min","_blank","noopener,noreferrer")}
 function submitInterest(){document.getElementById("formStatus").textContent="The interest form will be connected securely before launch. No information has been sent yet."}
 function setModeButtons(){document.getElementById("byRoleBtn").classList.toggle("active",mode==="role");document.getElementById("byCompanyBtn").classList.toggle("active",mode==="company")}
