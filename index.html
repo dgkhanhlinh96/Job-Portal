@@ -1,17 +1,475 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Japan AI/Data Career Map — Explore AI and Data roles in Japan's tech industry" />
-    <title>Japan AI/Data Career Map</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Open Roles – AI &amp; Data Jobs in Japan</title>
+<meta name="description" content="Curated AI, data, analytics and engineering opportunities in Japan, with transparent role information and recruiter support." />
+<style>
+:root{
+  --bg:#0a0f11;--panel:#111719;--panel2:#151d20;--text:#f5f7f4;--muted:#a2aaa6;
+  --border:#263034;--accent:#9BE51B;--accent2:#7ecb0a;--chip:#232c2f;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+header{height:66px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;background:rgba(10,15,17,.94);backdrop-filter:blur(14px);z-index:20}
+.brand{font-size:22px;font-weight:850;letter-spacing:-.02em}
+nav{display:flex;gap:28px;margin-left:44px}
+nav a{color:var(--muted);text-decoration:none;font-size:14px;padding:23px 0 19px}
+nav a{cursor:pointer}
+nav a.active{color:var(--text);border-bottom:2px solid var(--accent)}
+.header-left{display:flex;align-items:center}.header-right{display:flex;gap:10px;align-items:center}
+.pill-btn,.icon-btn{border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:10px;padding:9px 12px}
+.wrap{max-width:1500px;margin:0 auto;padding:20px 24px 32px}
+.stats{display:flex;gap:28px;margin-bottom:16px}.stat strong{display:block;font-size:21px}.stat span{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--border);padding:4px;border-radius:10px;gap:4px}
+.seg button{border:none;background:transparent;color:var(--muted);padding:8px 13px;border-radius:7px;font-weight:700;font-size:13px}
+.seg button.active{background:#050708;color:#fff}
+.shown{font-size:13px;color:var(--muted)}
+.search{width:100%;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:11px;padding:13px 15px;outline:none}
+.filter-section{margin-top:12px;padding:14px 0 2px;border-bottom:1px solid var(--border)}
+.filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.filter-label{width:155px;color:var(--muted);font-size:12px;font-weight:750}
+.chip-filter{border:1px solid var(--border);background:var(--panel);color:var(--muted);border-radius:999px;padding:7px 11px;font-size:12px;transition:.15s}
+.chip-filter:hover{border-color:#52605a;color:var(--text)}
+.chip-filter.active{border-color:var(--accent);color:#e5ffc0;background:rgba(155,229,27,.09)}
+.clear-row{display:flex;justify-content:flex-end;margin-top:-2px;margin-bottom:8px}
+.clear-btn{border:none;background:transparent;color:var(--muted);font-size:12px}
+.clear-btn:hover{color:var(--text)}
+.active-summary{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.active-token{font-size:11px;padding:5px 8px;border-radius:999px;background:rgba(155,229,27,.1);color:#e5ffc0;border:1px solid rgba(155,229,27,.3)}
+.meta-row{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px}
+.meta-row h1{font-size:29px;margin:0;letter-spacing:-.025em}.meta-row .sub{color:var(--muted);font-size:14px;margin-top:5px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.job-card{border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:16px;min-height:140px;position:relative;transition:.15s}
+.job-card:hover{border-color:#53635c;transform:translateY(-1px)}
+.job-card .save{position:absolute;right:10px;top:9px;color:var(--muted);font-size:19px;border:0;background:transparent;padding:5px;z-index:2}
+.job-card .save.saved{color:var(--accent)}
+.card-head{display:flex;gap:12px}.logo{width:44px;height:44px;border-radius:9px;border:1px solid var(--border);display:grid;place-items:center;background:#fff;color:#111;font-weight:900;flex:0 0 auto}
+.job-title{font-size:17px;font-weight:800;line-height:1.25;padding-right:24px}.company{color:var(--muted);font-size:13px;margin-top:3px}
+.salary{color:var(--accent);font-weight:850;font-size:14px;margin-top:10px}.details{color:var(--muted);font-size:12px;margin-top:6px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.tag{background:var(--chip);border-radius:6px;padding:4px 7px;font-size:11px;color:#d5dad7}
+.company-card{border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:17px;display:flex;gap:14px;align-items:center;min-height:110px}
+.company-main{flex:1}.company-name{font-size:17px;font-weight:800}.company-meta{font-size:12px;color:var(--muted);margin-top:4px}
+.company-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.open-count{font-size:12px;color:var(--muted);text-align:right}.open-count strong{display:block;color:var(--accent);font-size:18px}
+.detail-state{display:none;grid-template-columns:minmax(0,64%) minmax(360px,36%);gap:18px}
+body.detail-open .browse-state{display:none} body.detail-open .detail-state{display:grid}
+.list-wrap{display:flex;flex-direction:column;gap:10px}
+.list-row{min-height:96px;border:1px solid var(--border);background:var(--panel);border-radius:12px;padding:14px 15px;display:grid;grid-template-columns:minmax(250px,1.45fr) .75fr .9fr 1fr auto;gap:14px;align-items:center}
+.list-row.selected{border-color:var(--accent);background:rgba(155,229,27,.035)}
+.list-main{display:flex;gap:12px;align-items:center}.list-role{font-size:17px;font-weight:800}.list-company{font-size:13px;color:var(--muted);margin-top:3px}
+.list-salary{color:var(--accent);font-weight:850}.list-meta{font-size:12px;color:var(--muted);line-height:1.5}
+.detail{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;border:1px solid var(--border);background:var(--panel);border-radius:14px}
+.detail-inner{padding:20px}.detail-head{display:flex;gap:13px}.detail-title{font-size:20px;font-weight:850}.detail-company{font-size:14px;color:var(--muted);margin-top:3px}
+.close{margin-left:auto;border:none;background:none;color:var(--muted);font-size:22px}.facts{display:grid;grid-template-columns:repeat(4,1fr);margin:18px 0 12px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.fact{padding:14px 8px 12px 0}.fact:not(:last-child){border-right:1px solid var(--border);margin-right:8px}.fact strong{display:block;font-size:13px}.fact span{font-size:10px;color:var(--muted)}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--border);margin-top:16px}.tab{padding:10px 0;font-size:12px;color:var(--muted)}.tab.active{color:var(--text);border-bottom:2px solid var(--accent)}
+.section{padding-top:17px}.section h3{font-size:14px;margin:0 0 7px}.section p,.section li{font-size:12px;line-height:1.62;color:var(--muted)}.section ul{padding-left:17px}
+.support-box{border-top:1px solid var(--border);margin-top:18px;padding-top:18px}.support-title{font-size:15px;font-weight:800;margin-bottom:10px}
+.recruiter{display:flex;gap:10px;align-items:center}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#c49a84;color:white;font-weight:900}
+.rec-name{font-weight:800;font-size:13px}.rec-role{font-size:11px;color:var(--muted)}
+.support-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;font-size:11px;color:var(--muted)}
+.support-list span:before{content:"✓";color:var(--accent);font-weight:900;margin-right:5px}
+.cta{width:100%;border:none;background:var(--accent);color:#0c1206;font-weight:900;border-radius:9px;padding:11px;margin-top:12px}
+.back{margin-bottom:12px}.empty{border:1px dashed var(--border);border-radius:12px;padding:30px;text-align:center;color:var(--muted)}
+@media(max-width:1050px){.grid{grid-template-columns:1fr}.detail-state{grid-template-columns:1fr}.detail{position:relative;top:auto;max-height:none}.list-row{grid-template-columns:1fr}.filter-label{width:100%}}
+@media(max-width:760px){header{height:auto;min-height:66px;padding:12px 16px}.header-left{align-items:flex-start;flex-direction:column;gap:8px}.brand{font-size:18px}nav{margin-left:0;gap:16px;overflow:auto;max-width:calc(100vw - 120px)}nav a{padding:4px 0 7px;white-space:nowrap;font-size:12px}.header-right .icon-btn{display:none}.wrap{padding:16px}.stats{gap:20px}.meta-row{align-items:flex-start;gap:12px}.meta-row h1{font-size:24px}.meta-row>.shown{display:none}}
+
+.line-connect{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:108px 1fr;
+  gap:14px;
+  align-items:center;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:var(--panel);
+}
+.qr-placeholder{
+  width:108px;height:108px;border-radius:9px;
+  background:
+    linear-gradient(90deg,#fff 9px,transparent 9px) 0 0/18px 18px,
+    linear-gradient(#fff 9px,transparent 9px) 0 0/18px 18px,
+    #111;
+  border:7px solid #fff;
+  box-shadow:0 0 0 1px var(--border);
+  display:grid;place-items:center;
+  color:#111;font-size:10px;font-weight:900;text-align:center;
+}
+.line-title{font-size:13px;font-weight:850;margin-bottom:4px}
+.line-copy{font-size:11px;line-height:1.5;color:var(--muted)}
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+.line-btn{
+  border:none;background:#06C755;color:#fff;border-radius:9px;
+  padding:10px;font-weight:850;font-size:12px;cursor:pointer
+}
+.call-btn{
+  border:1px solid var(--border);background:transparent;color:var(--text);
+  border-radius:9px;padding:10px;font-weight:750;font-size:12px;cursor:pointer
+}
+.future-note{font-size:10px;color:var(--muted);margin-top:8px}
+@media(max-width:650px){
+  .line-connect{grid-template-columns:1fr}
+  .qr-placeholder{margin:auto}
+  .action-row{grid-template-columns:1fr}
+}
+
+
+.notice-bar{
+  max-width:1500px;margin:12px auto 0;padding:10px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel);
+}
+.notice-copy{font-size:13px;color:var(--muted)}
+.notice-copy strong{color:var(--text)}
+.notice-actions{display:flex;gap:8px;flex:0 0 auto}
+.notice-line,.notice-book{
+  border:none;border-radius:8px;padding:9px 13px;font-size:12px;font-weight:850
+}
+.notice-line{background:#06C755;color:white}
+.notice-book{background:var(--text);color:var(--bg)}
+.express{
+  margin-top:22px;border:1px solid var(--border);background:var(--panel);
+  border-radius:14px;padding:20px;
+}
+.express h2{font-size:20px;margin:0 0 4px}
+.express-intro{font-size:12px;color:var(--muted);margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field label{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea{
+  width:100%;border:1px solid var(--border);background:var(--bg);color:var(--text);
+  border-radius:9px;padding:11px 12px;outline:none
+}
+.field textarea{min-height:90px;resize:vertical}
+.full{grid-column:1/-1}
+.interest-chips{display:flex;flex-wrap:wrap;gap:7px}
+.company-choice{
+  border:1px solid var(--border);background:var(--bg);color:var(--muted);
+  border-radius:999px;padding:7px 10px;font-size:11px
+}
+.company-choice.active{border-color:var(--accent);color:#e5ffc0;background:rgba(155,229,27,.08)}
+.form-note{font-size:11px;color:var(--muted);margin-top:10px}
+.submit-interest{
+  margin-top:14px;border:none;border-radius:9px;background:var(--accent);color:#0c1206;
+  font-weight:900;padding:11px 16px
+}
+.promise-list{display:grid;grid-template-columns:1fr;gap:7px;margin-top:12px}
+.promise{font-size:11px;line-height:1.5;color:var(--muted)}
+.promise strong{color:var(--text)}
+.home-express{margin-top:26px}
+.site-section{scroll-margin-top:92px;margin-top:30px;border-top:1px solid var(--border);padding-top:28px}
+.site-section h2{font-size:24px;margin:0 0 8px}.site-section>p{color:var(--muted);font-size:13px;line-height:1.7;max-width:760px}
+.resource-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.resource-card{border:1px solid var(--border);background:var(--panel);border-radius:13px;padding:18px}.resource-card h3{margin:0 0 7px;font-size:15px}.resource-card p{color:var(--muted);font-size:12px;line-height:1.6;margin:0}
+.disclaimer{color:var(--muted);font-size:10px;line-height:1.6;margin:16px 0 0}
+footer{border-top:1px solid var(--border);color:var(--muted);font-size:11px;padding:24px;text-align:center}
+@media(max-width:700px){
+  .notice-bar{align-items:flex-start;flex-direction:column}
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .resource-grid{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <div class="brand">Open Roles · AI &amp; Data Japan</div>
+    <nav><a class="active" href="#jobs">Jobs</a><a href="#companies" onclick="showCompanies(event)">Companies</a><a href="#resources">Career Resources</a><a href="#meet-linh">Meet Linh</a></nav>
+  </div>
+  <div class="header-right"><button class="pill-btn" id="savedBtn" onclick="showSavedOnly()">♡ Saved (0)</button><button class="icon-btn" aria-label="Linh profile">L</button></div>
+</header>
+
+<div class="notice-bar">
+  <div class="notice-copy">🔔 <strong>Get notified when new roles are added</strong> · Connect on LINE or book a call with Linh.</div>
+  <div class="notice-actions">
+    <button class="notice-line" onclick="contactNotConfigured('LINE')">LINE</button>
+    <button class="notice-book" onclick="contactNotConfigured('Booking link')">Book Linh</button>
+  </div>
+</div>
+
+
+<main class="wrap">
+  <section class="browse-state" id="jobs">
+    <div class="stats">
+      <div class="stat"><strong id="companyCount">9</strong><span>Companies</span></div>
+      <div class="stat"><strong id="openCountTop">12</strong><span>Open Roles</span></div>
+    </div>
+
+    <div class="topbar">
+      <div class="seg">
+        <button id="byRoleBtn" class="active">▣ By Role</button>
+        <button id="byCompanyBtn">▦ By Company</button>
+      </div>
+      <div class="shown"><span id="shownCount">12</span> roles shown</div>
+    </div>
+
+    <input id="search" class="search" placeholder="🔍 Search role, company or skill..." />
+
+    <div class="filter-section">
+      <div class="filter-row" id="roleFilters">
+        <span class="filter-label">Role</span>
+        <button class="chip-filter" data-value="AI Engineer">AI Engineer</button>
+        <button class="chip-filter" data-value="ML Engineer">ML Engineer</button>
+        <button class="chip-filter" data-value="Data Scientist">Data Scientist</button>
+        <button class="chip-filter" data-value="Data Engineer">Data Engineer</button>
+        <button class="chip-filter" data-value="Analytics">Analytics</button>
+        <button class="chip-filter" data-value="FDE">AI Solutions / FDE</button>
+        <button class="chip-filter" data-value="SWE">Software Engineer</button>
+        <button class="chip-filter" data-value="Leadership">Leadership</button>
+      </div>
+
+      <div class="filter-row" id="opportunityFilters">
+        <span class="filter-label">Company / Opportunity</span>
+        <button class="chip-filter" data-value="Startup">Startup</button>
+        <button class="chip-filter" data-value="VC-backed">VC-backed</button>
+        <button class="chip-filter" data-value="Unicorn">Unicorn</button>
+        <button class="chip-filter" data-value="Listed">Listed</button>
+        <button class="chip-filter" data-value="FinTech">FinTech</button>
+        <button class="chip-filter" data-value="AI">AI</button>
+        <button class="chip-filter" data-value="SaaS">SaaS</button>
+        <button class="chip-filter" data-value="English Friendly">English Friendly</button>
+        <button class="chip-filter" data-value="Remote Friendly">Remote Friendly</button>
+      </div>
+
+      <div class="filter-row" id="locationFilters">
+        <span class="filter-label">Location</span>
+        <button class="chip-filter" data-value="Tokyo">Tokyo</button>
+        <button class="chip-filter" data-value="Osaka">Osaka</button>
+        <button class="chip-filter" data-value="Fukuoka">Fukuoka</button>
+        <button class="chip-filter" data-value="Other">Other</button>
+      </div>
+
+      <div class="filter-row" id="japaneseFilters">
+        <span class="filter-label">Japanese Level</span>
+        <button class="chip-filter" data-value="No Japanese">No Japanese</button>
+        <button class="chip-filter" data-value="Conversational">Conversational</button>
+        <button class="chip-filter" data-value="Business">Business</button>
+        <button class="chip-filter" data-value="Native">Native</button>
+      </div>
+
+      <div class="clear-row"><button class="clear-btn" onclick="clearFilters()">Reset filters</button></div>
+      <div id="activeSummary" class="active-summary"></div>
+    </div>
+
+    <div class="meta-row">
+      <div><h1>Find your next technical role in Japan.</h1><div class="sub">Browse by role and company type. Key job details stay visible on every card.</div></div>
+      <div class="shown">Sort: <strong style="color:var(--text)">Newest⌄</strong></div>
+    </div>
+
+    <div id="browseGrid" class="grid"></div>
+
+<div class="express home-express">
+  <h2>Express Interest</h2>
+  <div class="express-intro">Tell Linh which companies or roles interest you. She’ll be in touch within 2 business days.</div>
+  <div class="form-grid">
+    <div class="field"><label>Full Name *</label><input placeholder="Your full name"></div>
+    <div class="field"><label>Email *</label><input placeholder="your@email.com"></div>
+    <div class="field"><label>Phone / LINE ID</label><input placeholder="+81 90-XXXX or LINE ID"></div>
+    <div class="field"><label>Current Title</label><input placeholder="e.g. Senior Data Scientist"></div>
+    <div class="field full">
+      <label>Companies I'm Interested In</label>
+      <div class="interest-chips"><button type="button" class="company-choice" onclick="this.classList.toggle('active')">CADDi</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">EARTHBRAIN</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">ExaWizards</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Flywheel</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Gen-AX</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Geniee</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">HENNGE</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">HRBrain</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">KOMOJU</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">KPMG Ignition Tokyo</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">LINE Yahoo</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">LegalOn Technologies</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Mercari</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Money Forward</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">PayPay</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Preferred Networks</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Rakuten Group</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Recruit</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Sansan</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">SmartHR</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Stockmark</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Suntory Holdings</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">Trust Inc.</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">U-NEXT</button><button type="button" class="company-choice" onclick="this.classList.toggle('active')">enechain</button></div>
+    </div>
+    <div class="field full"><label>Message (Optional)</label><textarea placeholder="Roles you're most interested in, availability, years of experience..."></textarea></div>
+  </div>
+  <div class="form-note">You can also connect on LINE or book a call directly if you prefer.</div>
+  <button class="submit-interest" onclick="submitInterest()">Express Interest</button>
+  <div class="form-note" id="formStatus" role="status"></div>
+</div>
+
+<section class="site-section" id="resources">
+  <h2>Career resources</h2>
+  <p>Practical guidance for AI, data, analytics and engineering professionals navigating the Japanese hiring market.</p>
+  <div class="resource-grid">
+    <article class="resource-card"><h3>Interview preparation</h3><p>Structure project examples, system-design answers and stakeholder stories before your interview.</p></article>
+    <article class="resource-card"><h3>Japan market insights</h3><p>Understand language expectations, compensation, work styles and how hiring processes differ.</p></article>
+    <article class="resource-card"><h3>Transparent career support</h3><p>Discuss fit and trade-offs honestly before deciding whether an opportunity is worth pursuing.</p></article>
+  </div>
+</section>
+
+<section class="site-section" id="meet-linh">
+  <h2>Meet Linh</h2>
+  <p>Linh Dang specializes in AI, data, analytics and engineering recruitment in Japan. The goal of this platform is to make relevant opportunities and hiring information easier to understand—not to push every available job.</p>
+  <div class="promise-list">
+    <div class="promise"><strong>No submission without permission.</strong> You decide where your profile goes.</div>
+    <div class="promise"><strong>Realistic advice.</strong> Role fit, compensation and process expectations are discussed transparently.</div>
+    <div class="promise"><strong>Long-term support.</strong> Staying connected is welcome even when the timing is not right.</div>
+  </div>
+</section>
+<p class="disclaimer">Role information shown on this first-release website is illustrative and may change. Confirm current openings, requirements and compensation directly with Linh before applying.</p>
+
+  </section>
+
+  <section class="detail-state">
+    <div>
+      <button class="pill-btn back" onclick="backToBrowse()">← Back to cards</button>
+      <div class="list-wrap" id="listWrap"></div>
+    </div>
+    <aside class="detail" id="detailPanel"></aside>
+  </section>
+</main>
+<footer>Curated by Linh Dang · AI, Data &amp; Engineering recruitment in Japan</footer>
+
+<script>
+const jobs = [
+{id:1,title:"Senior Machine Learning Engineer",company:"PayPay",salary:"¥10M - ¥16M",location:"Tokyo",work:"Hybrid",jp:"Business Japanese",skills:["Python","ML","Credit","AWS"],role:"ML Engineer",types:["FinTech","Listed","English Friendly","Remote Friendly"],logo:"P",featured:true},
+{id:2,title:"Data Scientist",company:"Mercari",salary:"¥8M - ¥13M",location:"Tokyo",work:"Remote",jp:"Conversational Japanese",skills:["Python","SQL","ML","A/B Testing"],role:"Data Scientist",types:["Unicorn","English Friendly","Remote Friendly"],logo:"m"},
+{id:3,title:"Data Engineer",company:"LINE Yahoo",salary:"¥9M - ¥14M",location:"Tokyo",work:"Hybrid",jp:"Business Japanese",skills:["Python","SQL","Spark","BigQuery"],role:"Data Engineer",types:["Listed","AI"],logo:"LY"},
+{id:4,title:"AI Solutions Engineer / FDE",company:"Preferred Networks",salary:"¥7M - ¥12M",location:"Tokyo",work:"Remote",jp:"No Japanese",skills:["Python","LLM","AWS","Docker"],role:"FDE",types:["AI","English Friendly","Remote Friendly"],logo:"PF"},
+{id:5,title:"Machine Learning Engineer",company:"SmartHR",salary:"¥9M - ¥15M",location:"Osaka",work:"Hybrid",jp:"Business Japanese",skills:["Python","ML","NLP","PyTorch"],role:"ML Engineer",types:["SaaS","English Friendly","Remote Friendly"],logo:"S"},
+{id:6,title:"Senior Data Scientist",company:"Rakuten Group",salary:"¥10M - ¥18M",location:"Tokyo",work:"Hybrid",jp:"Business Japanese",skills:["Python","ML","SQL","BigQuery"],role:"Data Scientist",types:["Listed","AI"],logo:"R"},
+{id:7,title:"Head of Data",company:"Suntory Holdings",salary:"¥15M - ¥25M",location:"Tokyo",work:"Hybrid",jp:"Business Japanese",skills:["Leadership","Data Strategy","SQL","Python"],role:"Leadership",types:["Listed"],logo:"S"},
+{id:8,title:"Software Engineer",company:"HENNGE",salary:"¥6M - ¥10M",location:"Tokyo",work:"Hybrid",jp:"Business Japanese",skills:["Python","Go","AWS","SaaS"],role:"SWE",types:["SaaS","English Friendly"],logo:"H"},
+{id:9,title:"Backend Engineer",company:"KOMOJU",salary:"¥6M - ¥10M",location:"Tokyo",work:"Hybrid",jp:"Conversational Japanese",skills:["PHP","Laravel","AWS","MySQL"],role:"SWE",types:["FinTech","English Friendly"],logo:"K"},
+{id:10,title:"AI Engineer, Agent Platform",company:"Money Forward",salary:"¥7M - ¥11M",location:"Tokyo",work:"Partial Remote",jp:"Business Japanese",skills:["Python","LLM","Agents","AWS"],role:"AI Engineer",types:["FinTech","Listed","AI","Remote Friendly"],logo:"MF"},
+{id:11,title:"Engineering Manager, ML Platform",company:"Money Forward",salary:"¥10M - ¥15M",location:"Tokyo",work:"Hybrid",jp:"Business Japanese",skills:["Leadership","ML Platform","Cloud"],role:"Leadership",types:["FinTech","Listed","AI"],logo:"MF"},
+{id:12,title:"Analytics Engineer",company:"LegalOn Technologies",salary:"¥8.2M - ¥11M",location:"Tokyo",work:"Hybrid",jp:"Native Japanese",skills:["SQL","dbt","AWS","Data Modeling"],role:"Analytics",types:["VC-backed","AI","English Friendly"],logo:"L"}
+];
+
+let mode="role";
+let selected=jobs[0];
+let savedOnly=false;
+const savedJobs=new Set(JSON.parse(localStorage.getItem("openRolesSaved")||"[]"));
+const selectedRoles=new Set();
+const selectedTypes=new Set();
+const selectedLocations=new Set();
+const selectedJapanese=new Set();
+
+function filteredJobs(){
+  const q=document.getElementById("search").value.toLowerCase();
+  return jobs.filter(j=>{
+    const txt=(j.title+" "+j.company+" "+j.skills.join(" ")+" "+j.types.join(" ")).toLowerCase();
+    const matchQ=!q||txt.includes(q);
+    const matchRole=selectedRoles.size===0||selectedRoles.has(j.role);
+    const matchTypes=selectedTypes.size===0||[...selectedTypes].every(t=>j.types.includes(t));
+    const matchLocation=selectedLocations.size===0||selectedLocations.has(j.location)||([...selectedLocations].includes("Other")&&!["Tokyo","Osaka","Fukuoka"].includes(j.location));
+    const matchJP=selectedJapanese.size===0||[...selectedJapanese].some(level=>j.jp.startsWith(level)||j.jp.includes(level));
+    const matchSaved=!savedOnly||savedJobs.has(j.id);
+    return matchQ&&matchRole&&matchTypes&&matchLocation&&matchJP&&matchSaved;
+  });
+}
+function jobCard(j){
+  return `<article class="job-card" onclick="openJob(${j.id})">
+    <button class="save ${savedJobs.has(j.id)?'saved':''}" aria-label="${savedJobs.has(j.id)?'Remove from':'Save to'} saved jobs" onclick="toggleSaved(event,${j.id})">${savedJobs.has(j.id)?'♥':'♡'}</button>
+    <div class="card-head"><div class="logo">${j.logo}</div><div>
+      ${j.featured?'<div style="font-size:10px;color:var(--accent);font-weight:900;margin-bottom:4px">FEATURED</div>':''}
+      <div class="job-title">${j.title}</div><div class="company">${j.company}</div>
+      <div class="salary">${j.salary}</div>
+      <div class="details">${j.location} · ${j.work} · ${j.jp}</div>
+      <div class="tags">${j.skills.map(s=>`<span class="tag">${s}</span>`).join("")}</div>
+    </div></div>
+  </article>`;
+}
+function companyCards(list){
+  const grouped={}; list.forEach(j=>(grouped[j.company]??=[]).push(j));
+  return Object.entries(grouped).map(([company,arr])=>`
+    <article class="company-card" onclick="filterCompany('${company.replace(/'/g,"\\'")}')">
+      <div class="logo">${arr[0].logo}</div>
+      <div class="company-main"><div class="company-name">${company}</div><div class="company-meta">${arr[0].location} · ${arr[0].work}</div>
+      <div class="company-tags">${[...new Set(arr.flatMap(x=>x.types))].slice(0,4).map(t=>`<span class="tag">${t}</span>`).join("")}</div></div>
+      <div class="open-count"><strong>${arr.length}</strong>open role${arr.length>1?'s':''}</div>
+    </article>`).join("");
+}
+function renderBrowse(){
+  const list=filteredJobs();
+  document.getElementById("shownCount").textContent=list.length;
+  document.getElementById("openCountTop").textContent=list.length;
+  document.getElementById("companyCount").textContent=new Set(list.map(j=>j.company)).size;
+  document.getElementById("browseGrid").innerHTML=list.length ? (mode==="role"?list.map(jobCard).join(""):companyCards(list)) : '<div class="empty">No roles match these filters.</div>';
+  document.getElementById("savedBtn").textContent=`♡ Saved (${savedJobs.size})`;
+  renderActiveSummary();
+}
+function renderActiveSummary(){
+  const all=[...selectedRoles,...selectedTypes,...selectedLocations,...selectedJapanese];
+  document.getElementById("activeSummary").innerHTML=all.map(x=>`<span class="active-token">${x}</span>`).join("");
+}
+function bindFilterGroup(containerId,setObj){
+  document.querySelectorAll(`#${containerId} .chip-filter`).forEach(btn=>{
+    btn.onclick=()=>{
+      const v=btn.dataset.value;
+      setObj.has(v)?setObj.delete(v):setObj.add(v);
+      btn.classList.toggle("active",setObj.has(v));
+      renderBrowse();
+    };
+  });
+}
+bindFilterGroup("roleFilters",selectedRoles);
+bindFilterGroup("opportunityFilters",selectedTypes);
+bindFilterGroup("locationFilters",selectedLocations);
+bindFilterGroup("japaneseFilters",selectedJapanese);
+
+function clearFilters(){
+  [selectedRoles,selectedTypes,selectedLocations,selectedJapanese].forEach(s=>s.clear());
+  document.querySelectorAll(".chip-filter").forEach(b=>b.classList.remove("active"));
+  document.getElementById("search").value="";
+  savedOnly=false;
+  renderBrowse();
+}
+function renderList(){
+  const list=filteredJobs();
+  document.getElementById("listWrap").innerHTML=list.map(j=>`
+    <div class="list-row ${j.id===selected.id?'selected':''}" onclick="selectJob(${j.id})">
+      <div class="list-main"><div class="logo">${j.logo}</div><div><div class="list-role">${j.title}</div><div class="list-company">${j.company}</div></div></div>
+      <div class="list-salary">${j.salary}</div>
+      <div class="list-meta">${j.location}<br>${j.work}<br>${j.jp}</div>
+      <div class="tags">${j.skills.map(s=>`<span class="tag">${s}</span>`).join("")}</div>
+      <button class="save ${savedJobs.has(j.id)?'saved':''}" aria-label="Save job" onclick="toggleSaved(event,${j.id})">${savedJobs.has(j.id)?'♥':'♡'}</button>
+    </div>`).join("");
+}
+function renderDetail(){
+  const j=selected;
+  document.getElementById("detailPanel").innerHTML=`
+    <div class="detail-inner">
+      <div class="detail-head"><div class="logo">${j.logo}</div><div><div class="detail-title">${j.title}</div><div class="detail-company">${j.company}</div></div><button class="close" onclick="backToBrowse()">×</button></div>
+      <div class="facts">
+        <div class="fact"><strong style="color:var(--accent)">${j.salary}</strong><span>Annual Salary</span></div>
+        <div class="fact"><strong>${j.location}</strong><span>Location</span></div>
+        <div class="fact"><strong>${j.work}</strong><span>Work Style</span></div>
+        <div class="fact"><strong>${j.jp.replace(" Japanese","")}</strong><span>Japanese Level</span></div>
+      </div>
+      <div class="tags">${j.skills.map(s=>`<span class="tag">${s}</span>`).join("")}</div>
+      <div class="tabs"><div class="tab active">Overview</div><div class="tab">About Company</div><div class="tab">Benefits</div><div class="tab">Process</div></div>
+      <div class="section"><h3>About the Role</h3><p>Work on high-impact data and AI initiatives in Japan, partnering with product, engineering, and business stakeholders.</p></div>
+      <div class="section"><h3>Key Responsibilities</h3><ul><li>Build and improve production-grade data or AI solutions.</li><li>Translate business needs into technical solutions.</li><li>Collaborate across product, engineering, and business teams.</li></ul></div>
+      <div class="section"><h3>Requirements</h3><ul><li>Relevant experience in data, AI, analytics, or engineering.</li><li>Hands-on experience with ${j.skills.slice(0,3).join(", ")}.</li><li>Strong communication in a cross-functional environment.</li></ul></div>
+      <div class="support-box">
+        <div class="support-title">Interested in this job?</div>
+        <div class="recruiter"><div class="avatar">L</div><div><div class="rec-name">Linh Dang</div><div class="rec-role">Data, AI & Analytics Recruiter · Japan</div></div></div>
+        <div class="promise-list">
+          <div class="promise"><strong>Free for candidates.</strong> You never pay for my support.</div>
+          <div class="promise"><strong>No submission without permission.</strong> You always decide where your profile goes.</div>
+          <div class="promise"><strong>No unnecessary job pushing.</strong> If I don’t have the right opportunity, I’ll tell you.</div>
+          <div class="promise"><strong>Clear information.</strong> I’ll explain the role, team, company, and hiring process before you apply.</div>
+          <div class="promise"><strong>Interview feedback.</strong> I’ll always try to get feedback after your interviews, whether you pass or not.</div>
+          <div class="promise"><strong>Long-term support.</strong> I’m happy to stay connected, even if the timing isn’t right today.</div>
+          <div class="promise"><strong>Long-term relationships.</strong> Recruitment isn’t about one job or one placement. It’s about building relationships that last.</div>
+        </div>
+        <div class="action-row">
+          <button class="line-btn" onclick="contactNotConfigured('LINE')">Connect on LINE</button>
+          <button class="call-btn" onclick="contactNotConfigured('Booking link')">Book a Call</button>
+        </div>
+      </div>
+    </div>`;
+}
+function openJob(id){selected=jobs.find(j=>j.id===id);document.body.classList.add("detail-open");renderList();renderDetail()}
+function selectJob(id){selected=jobs.find(j=>j.id===id);renderList();renderDetail()}
+function backToBrowse(){document.body.classList.remove("detail-open")}
+function filterCompany(company){mode="role";setModeButtons();document.getElementById("search").value=company;renderBrowse()}
+function showCompanies(event){event.preventDefault();mode="company";setModeButtons();document.body.classList.remove("detail-open");document.getElementById("jobs").scrollIntoView({behavior:"smooth"});renderBrowse()}
+function toggleSaved(event,id){event.stopPropagation();savedJobs.has(id)?savedJobs.delete(id):savedJobs.add(id);localStorage.setItem("openRolesSaved",JSON.stringify([...savedJobs]));renderBrowse();renderList()}
+function showSavedOnly(){savedOnly=!savedOnly;document.body.classList.remove("detail-open");renderBrowse();document.getElementById("savedBtn").style.borderColor=savedOnly?'var(--accent)':'var(--border)'}
+function contactNotConfigured(label){alert(`${label} will be connected before launch.`)}
+function submitInterest(){document.getElementById("formStatus").textContent="The interest form will be connected securely before launch. No information has been sent yet."}
+function setModeButtons(){document.getElementById("byRoleBtn").classList.toggle("active",mode==="role");document.getElementById("byCompanyBtn").classList.toggle("active",mode==="company")}
+document.getElementById("byRoleBtn").onclick=()=>{mode="role";setModeButtons();renderBrowse()}
+document.getElementById("byCompanyBtn").onclick=()=>{mode="company";setModeButtons();renderBrowse()}
+document.getElementById("search").addEventListener("input",renderBrowse)
+renderBrowse();renderList();renderDetail();
+</script>
+</body>
 </html>
