@@ -188,7 +188,7 @@ footer{border-top:1px solid var(--border);color:var(--muted);font-size:11px;padd
   <div class="notice-copy">🔔 <strong>Get notified when new roles are added</strong> · Connect on LINE or book a call with Linh.</div>
   <div class="notice-actions">
     <button class="notice-line" onclick="contactNotConfigured('LINE')">LINE</button>
-    <button class="notice-book" onclick="contactNotConfigured('Booking link')">Book Linh</button>
+    <button class="notice-book" onclick="openCalendly()">Book Linh</button>
   </div>
 </div>
 
@@ -451,7 +451,7 @@ function renderDetail(){
         </div>
         <div class="action-row">
           <button class="line-btn" onclick="contactNotConfigured('LINE')">Connect on LINE</button>
-          <button class="call-btn" onclick="contactNotConfigured('Booking link')">Book a Call</button>
+          <button class="call-btn" onclick="openCalendly()">Book a Call</button>
         </div>
       </div>
     </div>`;
@@ -464,6 +464,7 @@ function showCompanies(event){event.preventDefault();mode="company";setModeButto
 function toggleSaved(event,id){event.stopPropagation();savedJobs.has(id)?savedJobs.delete(id):savedJobs.add(id);localStorage.setItem("openRolesSaved",JSON.stringify([...savedJobs]));renderBrowse();renderList()}
 function showSavedOnly(){savedOnly=!savedOnly;document.body.classList.remove("detail-open");renderBrowse();document.getElementById("savedBtn").style.borderColor=savedOnly?'var(--accent)':'var(--border)'}
 function contactNotConfigured(label){alert(`${label} will be connected before launch.`)}
+function openCalendly(){window.open("https://calendly.com/rhlinh-dang-casualchat/30min","_blank","noopener,noreferrer")}
 function submitInterest(){document.getElementById("formStatus").textContent="The interest form will be connected securely before launch. No information has been sent yet."}
 function setModeButtons(){document.getElementById("byRoleBtn").classList.toggle("active",mode==="role");document.getElementById("byCompanyBtn").classList.toggle("active",mode==="company")}
 document.getElementById("byRoleBtn").onclick=()=>{mode="role";setModeButtons();renderBrowse()}
